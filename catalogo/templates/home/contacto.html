@@ -5,6 +5,13 @@
 {% endblock %}
 
 {% block content %}
+	{% if info_enviado%}
+		<font size="9" color="purple" face="Comic Sans MS"> Gracias Por Registrarse</font><p>
+		<br>
+		<font size="6" color="purple" face="Comic Sans MS">Tu informacion fue la siguiente</font>
+		<p>Email usado: {{ email }}
+		<p>Titulo usado: {{ title }}
+	{% else %}
 <center>
 	<form action="." method = "POST">
 		{% csrf_token %}
@@ -13,4 +20,5 @@
 	</form>
 	<BODY BGCOLOR = "Silver"LINK ="" text = "#08B808" VLINK = "#08B808"> </BODY>
 </center>
+{% endif %}
 {% endblock %}

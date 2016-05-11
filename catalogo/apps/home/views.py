@@ -1,7 +1,6 @@
 from django.core.mail import EmailMultiAlternatives
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from catalogo.apps.home.forms import contact_form
 from catalogo.apps.ventas.models import *
 from catalogo.apps.home.forms import *
 from django.contrib.auth import login, logout, authenticate
@@ -12,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, InvalidPage #paginacion
 def contact_view (request):
 	formulario = contact_form()
 	ctx = {'form':formulario}
-	return render_to_response('home/contacto.html',ctx,context_instance = RequestContext(request))
+	return render_to_response('home/contacto.html',ctx,context_instance = RequestContext(request) )
 
 def about_view (request):
 	return render_to_response('home/about.html', context_instance = RequestContext(request))
@@ -31,13 +30,6 @@ def contact_view (request):
 			email = formulario.cleaned_data['correo']
 			title = formulario.cleaned_data['titulo']
 			text = formulario.cleaned_data['texto']
-			''' Bloque configuracion de envio por GMAIL '''
-			to_admin = 'alhoyos73@misena.edu.co'
-			html_content = "Informacion recibida de %s <br> ---Mensaje--- <br> %s"%(email,text)
-			msg = EmailMultiAlternatives('correo de contacto', html_content,'from@server.edu.co',[to_admin])
-			msg.attach_alternative(html_content,'text/html')
-			msg.send()
-			''' Fin del Bloque'''
 	else:
 		formulario = contact_form()
 	ctx = {'form':formulario,'email':email,"title":title, "text":text,"info_enviado":info_enviado}
@@ -59,8 +51,8 @@ def single_categoria_view(request, id_prod):
 	return render_to_response('home/single_categoria.html',ctx,context_instance = RequestContext(request))
 
 def productos_view(request, pagina):
+	lista_prod = Producto.objects.filter(status=True)
 	#lista_prod = Producto.objects.all().count() 
-	lista_prod = Producto.objects.all().count() 
 	paginator = Paginator(lista_prod, 5)
 	try:
 		page = int(pagina)
